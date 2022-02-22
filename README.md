@@ -1,5 +1,5 @@
 # ExpressRead
-Library Management System \
+Library Management System
 
 ## Entities
 
