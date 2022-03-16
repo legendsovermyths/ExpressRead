@@ -1,6 +1,9 @@
 # ExpressRead
 Library Management System
 
+## ER Diagram
+![ER Diagram](https://user-images.githubusercontent.com/62871606/158558338-6a95ffe1-747f-4321-8e86-2221566b87dd.png)
+
 ## Entities
 
 ### Member Table: 
@@ -45,3 +48,6 @@ Library Management System
 ### Authors Table:
 
 ### Waitlist Table:
+
+
+
