@@ -1,5 +1,5 @@
 # ExpressRead
-Library Management System
+Library Management System - A DBMS Project
 
 ## ER Diagram
 ![ER Diagram](https://user-images.githubusercontent.com/62871606/159132537-2d6ccc65-1909-4eab-810b-f740afb9df65.png)
