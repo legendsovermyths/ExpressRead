@@ -2,7 +2,8 @@
 Library Management System
 
 ## ER Diagram
-![ER Diagram](https://user-images.githubusercontent.com/62871606/158558338-6a95ffe1-747f-4321-8e86-2221566b87dd.png)
+![image (4)](https://user-images.githubusercontent.com/63259605/159131277-20a02109-d106-448a-a778-7cb3cfc81afe.png)
+
 
 ## Entities
 
