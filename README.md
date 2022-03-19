@@ -2,52 +2,7 @@
 Library Management System
 
 ## ER Diagram
-![ER Diagram](https://user-images.githubusercontent.com/62871606/158558338-6a95ffe1-747f-4321-8e86-2221566b87dd.png)
+![ER Diagram](https://user-images.githubusercontent.com/62871606/159132537-2d6ccc65-1909-4eab-810b-f740afb9df65.png)
 
-## Entities
-
-### Member Table: 
-	ID*
-	Phone*
-	Email*
-	Designation (Student/Faculty)
-	Fine/Due
-	CollegeID
-	Password
-	VerificationStatus
-			  
-### Publisher Table:
-	PublisherID*
-	PublisherName
-	PublisherEmail
-	PublisherPhone
-
-### Books Table:
-	BookID*
-	BookName
-	BookRating
-	BookGenre
-	PublishersID*
-	SectionID*
-
-### Copy Table:
-	BookID*
-	CopyNum*
-	CopyPrice
-	CopyCondition
-
-### Sections Table:
-	SectionID*
-	SectionFloor
-	SectionRack
-	
-### Records Table:
-
-### Wishlists Table:
-
-### Authors Table:
-
-### Waitlist Table:
-
-
-
+## Relational Schema
+![relationSchema](https://user-images.githubusercontent.com/62871606/159132585-a4bf1919-8f13-447d-9255-1349b6ecd13c.png)
