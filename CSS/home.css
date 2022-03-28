@@ -1,0 +1,136 @@
+body {
+  font-family: arial;
+  height: 100%;
+  margin: 0;
+}
+
+#wrapper {
+  width: 100%;
+  margin: 0 auto;
+  background: #fff;
+  opacity: 1;
+}
+
+#main-navigation {
+  background: #8aa2e3;
+  padding: 5px;
+}
+
+#main-navigation ul {
+  text-align: right;
+  list-style-type: none;
+  margin-right: 10px;
+  font-weight: bold;
+}
+
+#main-navigation li {
+  display: inline-block;
+  margin-left: 15px;
+  border-color: #535379;
+}
+
+#main-navigation a {
+  color: #fff;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-size: 14px;
+  padding: 10px;
+  background-color: #8aa2e3;
+  border-radius: 15px;
+}
+
+#main-navigation a:hover {
+  background: #535379;
+  border-radius: 15px;
+}
+
+.content {
+  width: 500px;
+  height: 400px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-width: 2px;
+  background-color: #e0eaf7;
+  padding: 50px;
+  border-radius: 10px;
+  text-align: center;
+  font-weight: bolder;
+}
+
+main-navigation {
+  background: #edf2f9;
+  padding: 5px;
+}
+
+.searchbar {
+  left: 50%;
+  padding-left: 40%;
+}
+
+.buttons {
+  border-color: #535379;
+  color: #fff;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-size: 14px;
+  padding: 4px 6px;
+  background-color: #6284de;
+  border-radius: 12px;
+}
+
+.buttons:hover {
+  background: #535379;
+  border-radius: 12px;
+}
+.tables {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 90%;
+  position: absolute;
+  left: 7%;
+  margin-top: 30px;
+}
+
+.tables td {
+  text-align: center;
+  padding: 1px;
+  text-transform: capitalize;
+}
+
+.tables th {
+  border: 1px solid black;
+  text-align: center;
+  padding: 1px;
+}
+
+.tables tr:nth-child(even) {
+  background-color: #bcc6f0;
+}
+
+.tables tr:nth-child(odd) {
+  background-color: #99a4cf;
+}
+
+tr {
+  line-height: 2em;
+}
+
+.homebuttons {
+  width: 300px;
+  height: 300px;
+  margin-left: 95%;
+  color: white;
+  background: url(../images/book3.png) no-repeat;
+  background-size: cover;
+}
+
+.btns a {
+  color: white;
+  text-decoration: none;
+}
+.btns {
+  padding-top: 45%;
+  padding-left: 25%;
+}
