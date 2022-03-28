@@ -354,7 +354,7 @@
 						<tr>
 	                     <form action="BooksearchPage.php" method="POST">
 	      					<td>
-							  <button type="submit"name="gr_button" class="btn btn-default btn-dark btn-sm"><?php echo $book[0]; ?></button>
+							  <input type="submit" name="gr_button" class="btn btn-default btn-dark btn-sm" value="<?php echo $book[0]; ?>">
 	      					</td>
 	                    	</form>	
 				
@@ -410,7 +410,7 @@
 
 							<form action="BooksearchPage.php" method="POST">
       					<td>
-						  <button type="submit"name="gr_button" class="btn btn-default btn-dark btn-sm"><?php echo $book[0]; ?></button>
+						  <input type="submit" name="gr_button" class="btn btn-default btn-dark btn-sm" value="<?php echo $book[0]; ?>">
       					</td>
                     		</form>
 
@@ -497,4 +497,5 @@
 
 </table> 
 </div>   -->
+				</table>
 </body>
