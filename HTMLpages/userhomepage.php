@@ -43,9 +43,8 @@
 		{
 			$homeButtons = [
 							['Search Books','BookSearchPage.php'],
-							['My Profile','MyProfile.php'],
+							['My Profile','userhomepage.php'],
 							['My History','History.php'],
-							['My Clubs','Clubs.php'],
 							['Book Recommender','Recommender.php'],
 							['Change Password','ChangePassword.php']
 							];
@@ -54,12 +53,10 @@
 		{
 			$homeButtons = [
 								['Search Books','BookSearchPage.php'],
-								['My Profile','MyProfile.php'],
+								['My Profile','userhomepage.php'],
 								['My History','History.php'],
-								['My Clubs','Clubs.php'],
 								['Book Recommender','Recommender.php'],
 								['Return Book','Return.php'],
-								['Remove User','remove.php'],
 								['Pending Requests','Requests.php'],
 								['Search Student','SearchStudent.php'],
 								['Add a new Book','addNewBook.php'],

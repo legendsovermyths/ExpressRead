@@ -40,7 +40,7 @@
 	if($_SESSION['college_id']=='LIBRARY')
 		$sql = "select name,phone,email,designation,college_id from member where verification_status = 0 order by designation";
 	else
-		$sql = "select name,phone,email,designation,college_id from member where verification_status = 0 and designation!='admin' order by designation";
+		$sql = "select name,phone,email,designation,college_id from member where verification_status = 0 order by designation";
 	$result = mysqli_query($conn, $sql);
 	if(mysqli_num_rows($result)>0)
 	{
@@ -123,13 +123,14 @@
 		 ?>
 
 
-<thead>
+<thead class='table-dark'>
   <tr>
     <th>Name</th>
     <th>Phone</th>
     <th>Email</th>
     <th>Designation</th>
 	<th>College ID</th>
+	<th>Action</th>
   </tr>
 </thead>
 <?php
@@ -144,10 +145,11 @@
 		 	<td>
 		 		<!-- <input type="hidden" name="id_to_delete" value = "<?php //echo $user[4]?>"> -->
 		 		<input type="submit" class="btn btn-success btn-sm" name="<?php echo $user[4]?>" value="Accept">
+				 <input type="submit"  class="btn btn-danger btn-sm" name="<?php echo $user[4]?>" value="Reject">
 		 	</td>
-		 	<td>
-		 		<input type="submit"  class="btn btn-danger btn-sm" name="<?php echo $user[4]?>" value="Reject">
-		 	</td>
+		 	<!-- <td>
+		 		
+		 	</td> -->
 		 <?php
 		 			echo "</tr>";
 		 		/*echo "<td>$user[0]</td>";

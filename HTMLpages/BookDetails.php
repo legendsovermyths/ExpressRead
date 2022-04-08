@@ -4,20 +4,14 @@ include('../config/connectDB.php');
     session_start();
     $college_id = $_SESSION['college_id'];
 	$gr_num = $_SESSION['gr_no'];
-	$error="";
+	
 	$sql = "select mem_id from member where college_id = '$college_id'";
 	$result = mysqli_query($conn, $sql);
 	$mem_ids = mysqli_fetch_assoc($result);
 	$mem_id = $mem_ids['mem_id'];
 	mysqli_free_result($result);
 	$flipped_get = array_flip($_GET);
-	function debug_to_console($data) {
-		$output = $data;
-		if (is_array($output))
-			$output = implode(',', $output);
-	
-		echo "<script>console.log('Debug Objects: " . $output . "' );</script>";
-	}
+     
      if(isset($flipped_get['Delete']))
      {
 
@@ -113,7 +107,7 @@ include('../config/connectDB.php');
 
 			  	$to_email = "$email";
 				$subject = "Issue Book Email";
-				$headers = "From: librarymody@gmail.com\r\n";
+				$headers = "From: expressreadlibrary@gmail.com\r\n";
 				//$headers .= "CC: susan@example.com\r\n";
 				$headers .= "MIME-Version: 1.0\r\n";
 				$headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
@@ -123,12 +117,28 @@ include('../config/connectDB.php');
 				  <title>Issue Book Email</title>
 				</head>
 				<body>
-				  <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>MODY Library System</b></p><br>
+				  <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>ExpressRead Library</b></p><br>
 				  <p>Dear $name($college_id)<br>
-				  The following book has been issued by you today.<br>
-				  $gr_num |$bookName |".substr($auth, 0, -2)."|Accession id: $accession_id
+				  The following book has been issued by you today. 
 				  <br>
-				  You are welcome to contact us at librarymody@gmail.com for any Queries.
+				  <table style='border: 1px solid black;'>
+                <thead>
+                <tr>
+                <th style='border: 1px solid black;'>Book ID</th>	
+				<th style='border: 1px solid black;'>Book Title</th>
+				<th style='border: 1px solid black;'>Author</th>
+			
+				<th style='border: 1px solid black;'>Accession ID</th>
+                 </tr>
+                   </thead>
+				   <tr><td style='border: 1px solid black;'>$gr_num</td>
+				   <td style='border: 1px solid black;'>$bookName</td>
+				   <td style='border: 1px solid black;'>".substr($auth, 0, -2)."</td>
+				   <td style='border: 1px solid black;'>$accession_id</td>
+				   </tr>
+				   </table>
+				  <br>
+				   For any further queries contact us at expressreadlibrary@gmail.com 
 				  <br>
 				  Regards,
 				  <br>
@@ -138,7 +148,6 @@ include('../config/connectDB.php');
 				</html>
 				";
 				if (mail($to_email, $subject, $body, $headers)) {
-					debug_to_console("Test");
 				    //echo "Email successfully sent to $to_email...";
 				} else {
 				    echo "Email sending failed...";
@@ -149,6 +158,8 @@ include('../config/connectDB.php');
 		}
 		else
 		{
+			//display error
+			echo "<script>alert('You Have already issued $noOfBooks books, please return some book before issuing the next')</script>";
 			echo "<center>You Have already issued $noOfBooks books, please return some book before issuing the next</center><br />";
 		}
 		
@@ -201,11 +212,10 @@ include('../config/connectDB.php');
 	}
 	$sql = "SELECT b.gr_no,b.name,c.copy_no,p.pname,c.edition,b.category,l.shelf,l.section,l.floor,c.status from book b,copy c,publisher p,location l where b.gr_no='$gr_num' and b.gr_no=c.gr_no and b.pub_id=p.pub_id and l.loc_id=b.loc_id " ;
 	$result = mysqli_query($conn, $sql);
-    // if(mysqli_num_rows($result) > 0)
-	// {
-	// 	$copyrecord=mysqli_fetch_all($result);
-	// }
-	$copyrecord=mysqli_fetch_all($result);
+    if(mysqli_num_rows($result) > 0)
+	{
+		$copyrecord=mysqli_fetch_all($result);
+	}
 	mysqli_free_result($result);
  ?>
 
@@ -287,6 +297,7 @@ include('../config/connectDB.php');
 				<th>Section</th>
 				<th>Floor</th>
 				<th>Availability</th>
+				<th>Actions</th>
   </tr>
 </thead>
  <?php 
@@ -346,7 +357,7 @@ include('../config/connectDB.php');
 						if($designation=='admin'||$designation=='head_librarian'):
 	               	?>
 	               	<td>
-	               		<input type="submit" name="<?php echo $copyinfo[2]; ?>" class = "buttons" value="Delete">
+	               		<input type="submit" name="<?php echo $copyinfo[2]; ?>" class = "btn btn-sm btn-danger" value="Delete">
 	               	</td>
 	               	<?php
 	               		endif;
@@ -364,7 +375,7 @@ include('../config/connectDB.php');
 			if(mysqli_num_rows($result)==0)
 			{
 		?>
-				<input class = "buttons" type="submit" name="<?php echo $_SESSION['gr_no']?>" value = "Waitlist">
+				<input class = "btn btn-lg btn-primary" type="submit" name="<?php echo $_SESSION['gr_no']?>" value = "Waitlist">
 		<?php
 			}
 			mysqli_free_result($result);

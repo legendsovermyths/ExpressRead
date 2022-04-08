@@ -230,7 +230,7 @@ if(isset($_POST['search']))
 <div style="padding-left:7%;padding-right:7%;padding-top:20px;">
 </form>
 <table class="table table-striped table-responsive-md btn-table">
-<thead>
+<thead class='table-dark'>
   <tr>
     <th>College ID</th>
     <th>Name</th>
@@ -238,6 +238,7 @@ if(isset($_POST['search']))
     <th>Phone</th>
 	<th>Email</th>
 	<th>Fine due</th>
+	<th>Action</th>
   </tr>
 </thead>
 <?php 
@@ -258,7 +259,7 @@ if(isset($_POST['search']))
 		 
  ?>
 	<form action="SearchStudent.php" method="GET">
-<td><input type="submit" name="<?php echo $student[0]?>" class = "buttons" value="Remove"> </td>
+<td><input type="submit" name="<?php echo $student[0]?>" class = "btn btn-sm btn-danger" value="Remove"> </td>
 	 </form>
 		 </tr>
  <?php

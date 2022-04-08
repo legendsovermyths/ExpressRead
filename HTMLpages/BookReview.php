@@ -1,38 +1,35 @@
-<?php  
-	session_start();
-	$college_id = $_SESSION['college_id'];
+<?php 
 
+session_start();
+	$accession_id = $_SESSION['accession_id'];
 	include('../config/connectDB.php');
-
-	$flipped_get = array_flip($_GET);
-	if(isset($flipped_get['Review & Rate']))
-	{
-		$_SESSION['accession_id'] = $flipped_get['Review & Rate'];
-		header('Location: BookReview.php'); 
-	}
-	$availablerecord = true;
-    $sql = "SELECT r.accession_id,b.name,r.issue_date,r.due_date,COALESCE(r.return_date,'not returned')  FROM member m,record r,book b,copy c where 
-    r.gr_no=c.gr_no and  r.copy_no=c.copy_no  and b.gr_no=c.gr_no and r.issued_by=m.mem_id and m.college_id='$college_id' order by r.return_date,r.due_date desc ";
-	$result = mysqli_query($conn, $sql);
-
-	
-	if(mysqli_num_rows($result) > 0)
-	{
-		$recordinfo = mysqli_fetch_all($result);
-	}
-	else
-	{
-		$availablerecord = false;
-	}
+   $sql1 = "select r.gr_no,b.name from record r,book b where r.accession_id='$accession_id' and r.gr_no=b.gr_no";
+	$result = mysqli_query($conn, $sql1);
+	$infos = mysqli_fetch_assoc($result);
+	$gr_no = $infos['gr_no'];
+	$bname =$infos['name'];
 	mysqli_free_result($result);
-	if($college_id==NULL)
-	{
-		session_destroy();
-		header('Location: ../index.php');
-	}
+
+
+      if(isset($_POST['submit']))
+      {
+         
+      	$data= mysqli_real_escape_string($conn, $_POST['data']);
+      	
+        $sql="update record set review='$data' where accession_id='$accession_id'";
+          mysqli_query($conn, $sql);
+        $rate= mysqli_real_escape_string($conn, $_POST['rating']);
+      	
+        $sql01="update record set rating='$rate' where accession_id='$accession_id'";
+          mysqli_query($conn, $sql01);
+
+        $sql02="update book set rating=(select AVG(rating) from record r where r.gr_no='$gr_no') where book.gr_no='$gr_no' ";
+                mysqli_query($conn, $sql02);
+      }
+      
+
  ?>
- <!doctype html>
-<html>
+ <html>
 	<head>
 		<meta charset="utf-8" />
 	
@@ -91,53 +88,38 @@
   </div>
   <!-- Container wrapper -->
 </nav>
+<div class = "text-center">
+	<form action="BookReview.php" method="POST">
+    <div style="padding-left:7%;padding-right:7%;padding-top:7%;">
+	<table class="table table-bordered border-dark">
+		<tr>
+			<td>Book Id</td>
+			<?php  echo "<td>". $gr_no ."</td>"; ?>
+			
+		</tr>
+		<tr>
+			<td>Book Name</td>
+			<?php  echo "<td>". $bname ."</td>"; ?>
+		</tr>	
+         <tr>
+			<td>Enter book review</td>
+			
+				<td>
+					<input type = "text" class="form-control" placeholder = "enter the review" name = "data" value = "">
+				</td>
+		</tr>
+		<tr>
+			<td>Give book a Rating</td>
+			
+				<td>
+					<input type = "text" class="form-control" placeholder = "enter rating (out of 5)" name = "rating" value = "">
+				</td>
+		</tr>
 
-<form>
-<div style="padding-left:7%;padding-right:7%;padding-top:20px;">
-<table class="table table-striped table-responsive-md btn-table">
-
-<thead class="table-dark">
-  <tr>
-    <th>Accession ID</th>
-    <th>Book Name</th>
-    <th>Date of issue</th>
-    <th>Due Date</th>
-	<th>Return Date</th>
-	<th>Action</th>
-  </tr>
-</thead>
-<?php 
-     
-					
-					if($availablerecord):
-						foreach( $recordinfo as $recordrow):
-				?>
-						<tr>
-				<?php
-						echo "<td>". $recordrow[0]."</td>";
-						echo "<td>". $recordrow[1] ."</td>";
-						echo "<td>". $recordrow[2] ."</td>";
-						echo "<td>". $recordrow[3]." </td>";
-						echo "<td>". $recordrow[4]." </td>";
-				?>
-						<td>
-							<input type="submit" class="btn btn-info btn-sm" name="<?php echo $recordrow[0]?>" value = "Review & Rate">
-						</td>
-
-						
-
-						</tr>
-				<?php
-						endforeach;
-						else:
-							echo " <tr><td colspan=\"5\">nothing to show as ".$college_id ." has not read any book yet!!</td></tr>";
-						 endif;
-
-                 ?>
-
-					
-				
-</table>
-</form>
+	</table>
+    </div>
+	<input type="submit" name="submit" class = "btn btn-info btn-lg" value="submit">
+  </form>
+</div>
 </body>
 </html>

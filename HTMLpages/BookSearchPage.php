@@ -336,7 +336,7 @@
 </form>
 <table class="table table-striped table-responsive-md btn-table">
 
-<thead>
+<thead class='table-dark'>
   <tr>
     <th>Book ID</th>
     <th>Book Name</th>
@@ -394,7 +394,7 @@
 				?>
              <form action="BooksearchPage.php" method="GET">
 				  	<td>
-      				<input type="submit" name="<?php echo $book[0]; ?>" class = "buttons" value="checkout reviews" > 
+      				<input type="submit" name="<?php echo $book[0]; ?>" class = "btn btn-sm btn-info" value="checkout reviews" > 
       			</td>
       			</form>
 
@@ -450,7 +450,7 @@
 				?>
               <form action="BooksearchPage.php" method="GET">
 				 <td>
-      				<input type="submit" name="<?php echo $book[0]; ?>" class = "buttons" value="checkout reviews" > 
+      				<input type="submit" name="<?php echo $book[0]; ?>" class = "btn btn-sm btn-info" value="checkout reviews" > 
       			</td>
       		</form>
 

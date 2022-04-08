@@ -1,35 +1,36 @@
-<?php  
-	session_start();
+<?php 
+session_start();
 	$college_id = $_SESSION['college_id'];
 
-	include('../config/connectDB.php');
+include('../config/connectDB.php');
+$sql1="select password from member where college_id='$college_id'";
+$result1=mysqli_query($conn, $sql1);
+$fetchedpassword = mysqli_fetch_row($result1);
 
-	$flipped_get = array_flip($_GET);
-	if(isset($flipped_get['Review & Rate']))
+
+if(isset($_POST['change']))
+{
+	$old = mysqli_real_escape_string($conn, $_POST['OldPassword']);
+	$new = mysqli_real_escape_string($conn, $_POST['NewPassword']);
+	$renew = mysqli_real_escape_string($conn, $_POST['ReNewPassword']);
+	if($fetchedpassword[0] != $old)
 	{
-		$_SESSION['accession_id'] = $flipped_get['Review & Rate'];
-		header('Location: BookReview.php'); 
+		echo "you have entered wrong current password";
 	}
-	$availablerecord = true;
-    $sql = "SELECT r.accession_id,b.name,r.issue_date,r.due_date,COALESCE(r.return_date,'not returned')  FROM member m,record r,book b,copy c where 
-    r.gr_no=c.gr_no and  r.copy_no=c.copy_no  and b.gr_no=c.gr_no and r.issued_by=m.mem_id and m.college_id='$college_id' order by r.return_date,r.due_date desc ";
-	$result = mysqli_query($conn, $sql);
-
-	
-	if(mysqli_num_rows($result) > 0)
+	else if($new==$renew)
 	{
-		$recordinfo = mysqli_fetch_all($result);
+		    $sql="update member set password='$new' where college_id='$college_id' and password='$old'";
+		    $result = mysqli_query($conn, $sql);
 	}
 	else
 	{
-		$availablerecord = false;
+		echo "new password and confirm password doesn't match";
 	}
-	mysqli_free_result($result);
-	if($college_id==NULL)
-	{
-		session_destroy();
-		header('Location: ../index.php');
-	}
+	
+
+
+}
+
  ?>
  <!doctype html>
 <html>
@@ -91,53 +92,36 @@
   </div>
   <!-- Container wrapper -->
 </nav>
-
-<form>
-<div style="padding-left:7%;padding-right:7%;padding-top:20px;">
-<table class="table table-striped table-responsive-md btn-table">
-
-<thead class="table-dark">
-  <tr>
-    <th>Accession ID</th>
-    <th>Book Name</th>
-    <th>Date of issue</th>
-    <th>Due Date</th>
-	<th>Return Date</th>
-	<th>Action</th>
-  </tr>
-</thead>
-<?php 
-     
-					
-					if($availablerecord):
-						foreach( $recordinfo as $recordrow):
-				?>
-						<tr>
-				<?php
-						echo "<td>". $recordrow[0]."</td>";
-						echo "<td>". $recordrow[1] ."</td>";
-						echo "<td>". $recordrow[2] ."</td>";
-						echo "<td>". $recordrow[3]." </td>";
-						echo "<td>". $recordrow[4]." </td>";
-				?>
-						<td>
-							<input type="submit" class="btn btn-info btn-sm" name="<?php echo $recordrow[0]?>" value = "Review & Rate">
-						</td>
-
-						
-
-						</tr>
-				<?php
-						endforeach;
-						else:
-							echo " <tr><td colspan=\"5\">nothing to show as ".$college_id ." has not read any book yet!!</td></tr>";
-						 endif;
-
-                 ?>
-
-					
-				
+<div style="padding-left:7%;padding-right:7%;padding-top:7%;" class = "text-center">
+<table class="table table-borderless">
+<form action="ChangePassword.php" method="POST">
+		
+			<tr>
+				<td>Enter current Password: </td>
+				<td><div class = "textbox">
+		 	<input type = "password" class="form-control form-control-lg" placeholder = "Old Password" name = "OldPassword" >
+		 </div></td>
+			</tr>
+			<tr>
+				<td>Enter new Password: </td>
+				<td>
+					<div class = "textbox">
+		 	<input type = "password" class="form-control form-control-lg"  placeholder = "New Password" name = "NewPassword" >
+		 </div>
+				</td>
+			</tr>
+			<tr>
+				<td>Confirm new Password: </td>
+				<td>
+					<div class = "textbox">
+		 	<input type = "password" class="form-control form-control-lg" placeholder = "New Password" name = "ReNewPassword" >
+		 </div>
+				</td>
+			</tr>
+		<tr><td>
+		<input type="submit" name="change" class = "btn btn-lg btn-warning" value="SUBMIT"></td></tr>
+   </form>
 </table>
-</form>
-</body>
-</html>
+</div>		
+
+	</body>
