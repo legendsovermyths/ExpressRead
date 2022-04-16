@@ -15,69 +15,31 @@ if(isset($flipped_get['Remove']))
 {
 		//echo $flipped_get['Remove'];
 	$college_id = mysqli_real_escape_string($conn, $flipped_get['Remove']);
-    $sql1 = "select designation,mem_id from member where college_id = '$college_id'";
+    $sql1 = "select gr_no,mem_id from waitlist where mem_id = '$college_id'";
 	$result = mysqli_query($conn, $sql1);
 	$infos = mysqli_fetch_assoc($result);
-	$desig = $infos['designation'];
+	$desig = $infos['gr_no'];
 	$mem_id=$infos['mem_id'];
+	echo "$mem_id";
 	mysqli_free_result($result);
-  if(true)
+	$sql = "delete from waitlist where mem_id='$college_id'";
+	if(mysqli_query($conn, $sql))
 	{
-		    $sql01="select count(*) from record r where issued_by='$mem_id' and return_date is NULL";
-		         $result01 = mysqli_query($conn, $sql01);
-			$i1 = mysqli_fetch_assoc($result01);
-			$n1 = $i1['count(*)'];
-			
-		if($n1==0)
-	    {
-
-				    $sql2 = "select count(*) from record where issued_by = '$mem_id'";
-					$result = mysqli_query($conn, $sql2);
-					$info = mysqli_fetch_assoc($result);
-					$num = $info['count(*)'];
-
-					mysqli_free_result($result);
-				    if($num>0)
-				     {
-						$sql3 = "delete from record where issued_by='$mem_id'";
-				         mysqli_query($conn, $sql3);
-
-					}
-
-					if($desig=="admin" || $desig=="head_librarian")
-					{
-
-				         $sql4="update record set returned_by=NULL where returned_by='$mem_id'";
-				                  mysqli_query($conn, $sql4);
-
-					}
-
-
-
-
-						$sql = "delete from member where college_id='$college_id'";
-						if(mysqli_query($conn, $sql))
-						{
-							//echo "entry altered <br>";
-						}
-						else 
-						{
-					  		echo "error altering values: " . mysqli_error($conn) . "<br />";
-						}
-		}
-
-		else
-		{
-			echo "can't remove user, because ".$college_id." is still to return an issued book ";
-		}	
-	}	
+		// echo "entry altered <br>";
+	}
+	else 
+	{
+		  echo "error altering values: " . mysqli_error($conn) . "<br />";
+	}
 }
 
 
-$sql1 = "select college_id,name,designation,phone,email,fine_due from member where verification_status=1 ";
+$sql1 = "select mem_id, gr_no,priority_no from waitlist ";
+
 $result1 = mysqli_query($conn, $sql1);
 $studentinfo=  mysqli_fetch_all($result1);
 mysqli_free_result($result1);
+
 
 
 if(isset($_POST['search']))
@@ -94,26 +56,15 @@ if(isset($_POST['search']))
    }
 
   
-   if($search_by=="college_id")
+   if($search_by=="MEMBER")
    {
-    $sql = "select college_id,name,designation,phone,email,fine_due from member where college_id like '%$data%' and verification_status=1 order by mem_id";
+    $sql = "select mem_id, gr_no,priority_no from waitlist  where mem_id like '%$data%'";
    }
-   if($search_by=="name")
+   if($search_by=="BOOK")
    {
-    $sql = "select college_id,name,designation,phone,email,fine_due from member where name like '%$data%' and verification_status=1  order by mem_id";
+    $sql = "select mem_id, gr_no,priority_no from waitlist  where gr_no like '%$data%'";
    }
-   if($search_by=="designation")
-   {
-    $sql = "select college_id,name,designation,phone,email,fine_due from member where designation like '%$data%' and verification_status=1  order by mem_id";
-   } 
-   if($search_by=="phone")
-   {
-    $sql = "select college_id,name,designation,phone,email,fine_due from member where phone like '%$data%' and verification_status=1  order by mem_id";
-   }
-   if($search_by=="email")
-   {
-    $sql = "select college_id,name,designation,phone,email,fine_due from member where email like '%$data%' and verification_status=1  order by mem_id";
-   }
+   
    if($sql!="")
    {
 			$result = mysqli_query($conn, $sql);
@@ -142,7 +93,7 @@ if(isset($_POST['search']))
 	<head>
 		<meta charset="utf-8" />
 	
-		<title>Search Students</title>
+		<title>Waitlist</title>
         <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"> -->
         <link
   href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
@@ -197,7 +148,7 @@ if(isset($_POST['search']))
   </div>
   <!-- Container wrapper -->
 </nav>
-<form action="SearchStudent.php" method="POST">
+<form action="Waitlist.php" method="POST">
 <div class="container" style="margin-top:40px">
   <input class="form-control" id="anythingSearch" type="text" name="data" placeholder="Type something to search list items">
   <div id="myDIV" style="margin-top:20px">
@@ -205,27 +156,16 @@ if(isset($_POST['search']))
     <button class="btn btn-info" type="submit" name="">Clear</button>
   </div>
   <div class="form-check form-check-inline" style="margin-top:20px">
-  <input class="form-check-input" type="radio" id="name" name="search_on" value="name" />
-  <label class="form-check-label" for="inlineRadio1">By Name</label>
+  <input class="form-check-input" type="radio" id="name" name="search_on" value="MEMBER" />
+  <label class="form-check-label" for="inlineRadio1">By MEMBER</label>
 </div>
 
-<div class="form-check form-check-inline">
-  <input class="form-check-input" type="radio" id="genre" name="search_on" value="college_id" />
-  <label class="form-check-label" for="inlineRadio2">By College ID</label>
+<div class="form-check form-check-inline" style="margin-top:20px">
+  <input class="form-check-input" type="radio" id="genre" name="search_on" value="BOOK" />
+  <label class="form-check-label" for="inlineRadio2">By BOOK ID</label>
 </div>
 
-<div class="form-check form-check-inline">
-  <input class="form-check-input" type="radio" id="rating" name="search_on" value="designation" />
-  <label class="form-check-label" for="inlineRadio3">By Designation</label>
-</div>
-<div class="form-check form-check-inline">
-  <input class="form-check-input" type="radio" id="auth1" name="search_on" value="phone" />
-  <label class="form-check-label" for="inlineRadio3">By Phone Number</label>
-</div>
-<div class="form-check form-check-inline">
-  <input class="form-check-input" type="radio" id="auth1" name="search_on" value="email" />
-  <label class="form-check-label" for="inlineRadio3">By Email</label>
-</div>
+
 </div>
 <div style="padding-left:7%;padding-right:7%;padding-top:20px;">
 </form>
@@ -234,10 +174,10 @@ if(isset($_POST['search']))
   <tr>
     <th>College ID</th>
     <th>Name</th>
-    <th>Designation</th>
     <th>Phone</th>
+	<th>Book</th>
 	<th>Email</th>
-	<th>Fine due</th>
+	<th>Priority Number</th>
 	<th>Action</th>
   </tr>
 </thead>
@@ -249,16 +189,24 @@ if(isset($_POST['search']))
  ?>
 		 <tr>
  <?php
-		 echo "<td>". $student[0]."</td>";
-		 echo "<td>". $student[1] ."</td>";
+         $sql2 ="select name, phone, college_id, email from member where mem_id=$student[0]";
+		 $result2 = mysqli_query($conn, $sql2);
+         $studentinfo2=  mysqli_fetch_all($result2);
+         mysqli_free_result($result2);
+		 $sql3 ="select name from book where gr_no=$student[1]";
+		 $result3 = mysqli_query($conn, $sql3);
+         $studentinfo3=  mysqli_fetch_all($result3);
+         mysqli_free_result($result3);
+		 echo "<td>". $studentinfo2[0][2]."</td>";
+		 echo "<td>". $studentinfo2[0][0]."</td>";
+		 echo "<td>". $studentinfo2[0][1]."</td>";
+		 echo "<td>". $studentinfo3[0][0]."</td>";
+		 echo "<td>". $studentinfo2[0][3]."</td>";
 		 echo "<td>". $student[2] ."</td>";
-		 echo "<td>". $student[3] ."</td>";
-		 echo "<td>". $student[4] ."</td>";
-		 echo "<td>". $student[5] ."</td>";
 
 		 
  ?>
-	<form action="SearchStudent.php" method="GET">
+	<form action="Waitlist.php" method="GET">
 <td><input type="submit" name="<?php echo $student[0]?>" class = "btn btn-sm btn-danger" value="Remove"> </td>
 	 </form>
 		 </tr>

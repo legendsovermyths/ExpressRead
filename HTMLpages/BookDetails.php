@@ -166,16 +166,28 @@ include('../config/connectDB.php');
 	}
 	if(isset($flipped_get['Waitlist']))
 	{
+		$sql = "select mem_id from member where college_id = '$college_id'";
+			$result = mysqli_query($conn, $sql);
+			$mem_ids = mysqli_fetch_assoc($result);
+			$mem_id = $mem_ids['mem_id'];
 		$bookToWaitlist = mysqli_real_escape_string($conn, $flipped_get['Waitlist']);
 		// echo "Waitlist gr_no=" . $bookToWaitlist;
-		$sql = "SELECT count(*) from record where gr_no = $gr_num and return_date IS NULL";
+		$sql = "SELECT count(*) from record where gr_no = $gr_num and return_date IS NULL and issued_by=$mem_id";
 		$result = mysqli_query($conn, $sql);
 		$alreadyIssuedArr = mysqli_fetch_assoc($result);
 		$alreadyIssued = $alreadyIssuedArr['count(*)'];
+		$sql2 = "SELECT count(*) from waitlist where mem_id = $mem_id";
+		$result2 = mysqli_query($conn, $sql2);
+		$alreadyIssuedArr2 = mysqli_fetch_assoc($result2);
+		$alreadyIssued2 = $alreadyIssuedArr['count(*)'];
 		mysqli_free_result($result);
-		if($alreadyIssued==1)
+		if($alreadyIssued>=1)
 		{
 			echo "<center>You have already issued this book, you cannot add yourself to the waitlist</center><br>";
+		}
+		else if($alreadyIssued2>=1)
+		{
+			echo "<center>You have already added yourself for one book, you cannot add yourself to the waitlist</center><br>";
 		}
 		else
 		{
@@ -196,8 +208,8 @@ include('../config/connectDB.php');
 			$mem_ids = mysqli_fetch_assoc($result);
 			$mem_id = $mem_ids['mem_id'];
 			mysqli_free_result($result);
-			// echo "mem_id = $mem_id";
-			// echo "<br>";
+			echo "mem_id = $mem_id";
+			echo "<br>";
 			$sql = "insert into waitlist values($mem_id,'$gr_num',$priorityNum)";
 			if (mysqli_query($conn, $sql)) {
 			  	echo "<center>You Have been added to the waitlist your waiting number is $priorityNum</center><br />";
@@ -224,7 +236,7 @@ include('../config/connectDB.php');
 	<head>
 		<meta charset="utf-8" />
 	
-		<title>Sign Up Page</title>
+		<title>Issue</title>
         <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"> -->
         <link
   href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
